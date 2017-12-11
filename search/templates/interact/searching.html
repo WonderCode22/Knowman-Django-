@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-2 loginbox">
+ <div class="panel panel-info">
+   <div class="panel-heading">
+	   <div class="panel-title">Search Knowman</div>
+	</div>
+   <div class="container">
+      <div style="width:36%">
+         <form action="." method="GET">
+           {% csrf_token %}
+           {{ form|crispy }}
+           <input type="submit" value="Search" class="btn-basic"/>
+
+         </form>
+      </div>
+   </div>
+ </div>
+</div>
+
+{% endblock %}
+
+
+
+{% comment %}
+<form method="post" action="," class="form-horizontal" >
+ {% csrf_token %}
+ <div id="signupalert" style="display:none" class="alert alert-danger">
+  <p> Error:</p>
+  <span></span>
+ </div>
+ <div class="form-group">
+  <label for="id_symptom" class="col-md-3 control-label">Symptom</label>
+  <div class="col-md-6">
+    <input id="id_symptom" type="text" class="form-control" name="symptom" placeholder="Low Haze">
+  </div>
+ </div>
+ <div class="form-group">
+  <label for="id_statement" class="col-md-3 control-label">Problem Statement</label>
+  <div class="col-md-6">
+    <input id="id_statement" type="text" class="form-control" name="statement" placeholder="Motion Error">
+  </div>
+ </div>
+ <div class="form-group">
+  <label for="id_UTID" class="col-md-3 control-label">UTID</label>
+  <div class="col-md-6">
+    <input id="id_UTID" type="text" class="form-control" name="UTID" placeholder="UTID">
+  </div>
+ </div>
+ <div class="form-group">
+    <label for="id_system" class="col-md-3 control-label">System</label>
+ <div class="col-md-6">
+    <select class="custom-select">
+      <option selected>Select One</option>
+      <option value="1">SP1</option>
+      <option value="2">SP2</option>
+      <option value="3">SP3</option>
+      <option value="4">SP5</option>
+      <option value="5">SP7</option>
+    </select>
+ </div>
+ </div>
+ <div class="form-group">
+    <label for="id_subsystem" class="col-md-3 control-label">Subsystem</label>
+ <div class="col-md-6">
+    <select class="custom-select">
+      <option selected>Select One</option>
+      <option value="1">BEA</option>
+      <option value="2">BSS</option>
+      <option value="3">BPS</option>
+      <option value="4">Stage</option>
+      <option value="5">DAC</option>
+      <option value="6">COL</option>
+      <option value="7">Software</option>
+    </select>
+ </div>
+ </div>
+ <div class="form-group">
+  <div class="col-md-offset-5 col-md-9">
+  <button id="btn-signup" type="submit" class="btn btn-Info"><i class="icon-hand-right"></i>Search</button>
+  </div>
+ </div>
+</form>
+{% endcomment %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% if articles.count > 0 %}
+{% for article in articles %}
+   <li><a href="{{ article.object.get_absolute_url }}">{{ article.object.title }}</a></li>
+   {% endfor %}
+
+   {% else %}
+
+   <li>None to show!</li>
+
+   {% endif %}
+
+<div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-2 loginbox">
+ <div class="panel panel-info">
+   <div class="panel-heading">
+      <div class="panel-title">Post to Knowman</div>
+   </div>
+   <div class="container">
+      <div style="width:36%">
+
+      </div>
+   </div>
+ </div>
+</div>
+
+{% comment %}
+        <button data-toggle="collapse" data-target="#demo">Collapsible</button>
+
+      <div id="demo" class="collapse">
+        </div>
+
+{% endcomment %}
+{% endblock %}

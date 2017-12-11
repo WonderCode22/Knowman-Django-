@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% load staticfiles %} {% block body %}
+<div class="col-md-8 col-md-offset-2 col-sm-12 maincontent">
+    <div class="detail_case_display">
+
+        {% for obj in object_list %} {{ obj.id }} <br/> {{ obj.entry_date }} <br/> {{ obj.fault }} <br/>
+        <br/> {% endfor %} {% comment %} {{ object_list }}
+
+
+        <img class="detail_case_img" src="{% static 'base/img/surfscan.jpg' %}" />
+        <span class="detail_case_title">{{ case.case_title }}</span>
+        <span class="detail_case_number">{{ case.case_number }}</span>
+        <div class="detail_case_statement">{{ fsr_daily_notes }}</div>
+
+        {% endcomment %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+Hello,
+
+ You just registered for a Knowman account. Please click the link below to activate it:
+
+ http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+
+ This link is valid for {{ expiration_days }} days. If you received this email in error, please ignore. 

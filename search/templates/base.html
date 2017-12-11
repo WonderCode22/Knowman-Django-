@@ -1,0 +1,92 @@
+{% extends 'bootstrap3/bootstrap3.html' %}
+
+{% load staticfiles %}
+
+{% load bootstrap3 %}
+
+{% load bootstrap_themes %}
+
+{% load compress %}
+
+{% bootstrap_styles theme='simplex' type='min.css' %}
+
+{% block bootstrap3_extra_head %}
+
+   <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700" rel="stylesheet" type="text/css">
+   {% compress css %}
+   <link href="{% static 'base/css/style.css' %}" rel="stylesheet" type="text/css">
+   {% endcompress %}
+{% endblock %}
+
+{% block bootstrap3_title %}
+   {% block title %}
+      Welcome to Knowman
+   {% endblock %}
+{% endblock %}
+
+{% block bootstrap3_content %}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+   <div class="container">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+         </button>
+         <a href="{% url 'search' %}" class="navbar-brand">Knowman</a>
+      </div>
+         <ul class="nav navbar-nav">
+            <li class="hvr-curl-top-right"><a href="{% url 'search' %}">Home</a></li>
+            {% if request.user.is_authenticated %}
+            <li class="hvr-curl-top-right"><a href="{% url 'searching' %}">Search</a></li>
+            <li class="hvr-curl-top-right"><a href="{% url 'posting' %}">Post</a></li>
+            {% endif %}
+
+         </ul>
+         <div class="navbar-form pull-right">
+            {% if request.user.is_authenticated %}
+                  Welcome {% if request.user.first_name %}
+                     {{ request.user.first_name|capfirst }}
+                  {% else %}
+                     {{ request.user.username|capfirst }}
+                  {% endif %}! <a href="{% url 'auth_logout' %}" >Log Out</a>
+            {% else %}
+            Please <a href="{% url 'auth_login' %}">Log In</a> or <a href="{% url 'registration_register' %}">register</a> to access Knowman.
+            {% endif %}
+         </div>
+   </div>
+</nav>
+
+<div class="container-fluid">
+   <img src="{% static 'base/img/one_header_full.jpg' %}" class="bg" />
+   <div class="parallax">
+      <div class="row">
+         {% block body %}
+            <div class="col-md-8 col-md-offset-2 col-sm-12 maincontent">
+               <div style="text-align:center"><h2>Recent updates</h2>
+               <div>Knowman remembers {{ count }} cases for your analysis</div>
+            </div>
+{% comment %}
+               {% for case in cases %}
+               <a href="{% url 'case_details' case.id %}">
+               <div class="search_case_display">
+                  <img src="{% static 'base/img/surfscan.jpg' %}" />
+                  <span class="search_case_title">{{ case.case_title }}</span>
+                  <span class="search_case_number">{{ case.case_number }}</span>
+               </div>
+               </a>
+         {% endfor %}
+         {% endcomment %}
+            </div>
+         {% endblock %}
+      </div>
+   </div>
+</div>
+
+<div class="row text-center navbar footer">
+   <div class="col-md-12">
+      <p>2017 Knowman Team</p>
+   </div>
+</div>
+{% endblock %}
