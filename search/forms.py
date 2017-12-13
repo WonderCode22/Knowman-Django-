@@ -7,9 +7,9 @@ class loginForm(forms.Form):
 
 
 class SignUpForm(forms.ModelForm):
-        class Meta:
-            model = Post
-            fields = ('post',)
+    class Meta:
+        model = Post
+        fields = ('post',)
 
 class SuggestionForm(forms.Form):
     name = forms.CharField()

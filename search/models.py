@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
+from .search import TblinstallbaseIndex, BlogPostIndex
 
 class Case(models.Model):
     # null=True means you can save to DB with this field being blank
@@ -175,6 +175,29 @@ class Tblinstallbase(models.Model):
 
         db_table = 'TBLInstallBase'
 
+    def indexing(self):
+        obj = TblinstallbaseIndex(
+            meta={'id': self.id},
+            prod_family = self.prod_family,
+            prod_model = self.prod_model,
+            alias = self.alias,
+            install_start = self.install_start,
+            warranty_end = self.warranty_end,
+            ship_date = self.ship_date,
+            sales_order = self.sales_order,
+            tool_life_stage = self.tool_life_stage,
+            utid = self.utid,
+            legacy_sn = self.legacy_sn,
+            region_code = self.region_code,
+            region = self.region,
+            bu = self.bu,
+            fab_code = self.fab_code,
+            fab = self.fab,
+            svr_unit_code = self.svr_unit_code,
+            svr_unit = self.svr_unit
+        )
+        obj.save()
+        return obj.to_dict(include_meta=True)
 
 class Tblltdcategory(models.Model):
     category = models.CharField(db_column='Category', max_length=200, blank=True, primary_key=True)  # Field name made lowercase.
@@ -329,3 +352,19 @@ class Tblzinputtse(models.Model):
     class Meta:
 
         db_table = 'TBLZinputTSE'
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length = 200)
+    text = models.TextField(max_length = 100)
+
+    class Meta:
+        db_table = 'BlogPost'
+
+    def indexing(self):
+        obj = BlogPostIndex(
+            meta = {'id':self.id},
+            title = self.title,
+            text = self.text
+        )
+        obj.save()
+        return obj.to_dict(include_meta=True)

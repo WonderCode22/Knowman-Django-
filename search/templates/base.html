@@ -67,7 +67,7 @@
                <div style="text-align:center"><h2>Recent updates</h2>
                <div>Knowman remembers {{ count }} cases for your analysis</div>
             </div>
-{% comment %}
+            {% comment %}
                {% for case in cases %}
                <a href="{% url 'case_details' case.id %}">
                <div class="search_case_display">
@@ -76,8 +76,8 @@
                   <span class="search_case_number">{{ case.case_number }}</span>
                </div>
                </a>
-         {% endfor %}
-         {% endcomment %}
+               {% endfor %}
+            {% endcomment %}
             </div>
          {% endblock %}
       </div>

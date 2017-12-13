@@ -7,28 +7,34 @@ from . import models
 connections.create_connection()
 
 class TblinstallbaseIndex(DocType):
-    prod_family = Text
-    prod_model = Text
-    alias = Text
-    install_start = Integer
-    warranty_end = Integer
-    ship_date = Integer
-    sales_order = Text
-    tool_life_stage = Text
-    utid = Integer
-    legacy_sn = Text
-    region_code = Integer
-    region = Text
-    bu = Text
-    fab_code = Integer
-    fab = Text
-    svr_unit_code = Integer
-    svr_unit = Text
+    prod_family = Text()
+    prod_model = Text()
+    alias = Text()
+    install_start = Integer()
+    warranty_end = Integer()
+    ship_date = Integer()
+    sales_order = Text()
+    tool_life_stage = Text()
+    utid = Integer()
+    legacy_sn = Text()
+    region_code = Integer()
+    region = Text()
+    bu = Text()
+    fab_code = Integer()
+    fab = Text()
+    svr_unit_code = Integer()
+    svr_unit = Text()
+    class Meta:
+        index = 'tblinstallbase-index'
+
+class BlogPostIndex(DocType):
+    title = Text()
+    text = Text()
 
     class Meta:
-        index = 'TBLInstallBase-Index'
-        
+        index = 'blogpost-index'
+
 def bulk_indexing():
     TblinstallbaseIndex.init()
     es = Elasticsearch()
-    bulk(client=es, actions=(b.indexing() for b in models.TBLInstallBase.objects.all().iterator()))
+    bulk(client=es, actions=(b.indexing() for b in models.Tblinstallbase.objects.all().iterator()))
