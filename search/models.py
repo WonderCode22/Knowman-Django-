@@ -11,14 +11,16 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from .search import TblinstallbaseIndex, BlogPostIndex
+from .search import TblinstallbaseIndex, TblescalationIndex
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Case(models.Model):
     # null=True means you can save to DB with this field being blank
     # blank=True means the Django form will not require this field
     user = models.ForeignKey(User)
     case_number = models.CharField(max_length=200)
-    utid = models.CharField(max_length=200)
+    utid = models.CharField(max_length=200, blank=True, null=True)
     cse = models.CharField(max_length=200)
     entry_date = models.DateField(default=timezone.now)
     target = models.CharField(max_length=200, blank=True, null=True)
@@ -104,7 +106,7 @@ class Tblescalation(models.Model):
     poa_close = models.IntegerField(db_column='POA-Close', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     survey = models.IntegerField(db_column='Survey', blank=True, null=True)  # Field name made lowercase.
     esc_days = models.IntegerField(db_column='ESC days', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    case_id = models.IntegerField(db_column='Case ID', primary_key=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    case_id = models.IntegerField(db_column='Case ID')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     product_family = models.CharField(db_column='Product_Family', max_length=200)  # Field name made lowercase.
     utid = models.IntegerField(db_column='UTID')  # Field name made lowercase.
     case_description = models.CharField(db_column='Case Description', max_length=200)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -151,6 +153,61 @@ class Tblescalation(models.Model):
 
         db_table = 'TBLEscalation'
 
+    def indexing(self):
+        obj = TblescalationIndex(
+            
+            user = self.user.id,
+            entry_date = self.entry_date,
+            status = self.status,
+            plc_status = self.plc_status,
+            poa_close = self.poa_close,
+            survey = self.survey,
+            esc_days = self.esc_days,
+            product_family = self.product_family,
+            utid = self.utid,
+            case_description = self.case_description,
+            case_id = self.case_id,
+            fab_code = self.fab_code,
+            max_escalation_level = self.max_escalation_level,
+            current_esc_level = self.current_esc_level,
+            l1 = self.l1,
+            l2 = self.l2,
+            l3 = self.l3,
+            l4 = self.l4,
+            escalation = self.escalation,
+            deescalation = self.deescalation,
+            tse_owner = self.tse_owner,
+            second_owner = self.second_owner,
+            first_dispatch_tse = self.first_dispatch_tse,
+            first_dispatch_tse_date = self.first_dispatch_tse_date,
+            problem_statement = self.problem_statement,
+            symptoms = self.symptoms,
+            fault_id = self.fault_id,
+            system = self.system,
+            subsystem = self.subsystem,
+            fault = self.fault,
+            fix_rca = self.fix_rca,
+            poa = self.poa,
+            tse_analysis = self.tse_analysis,
+            plc_track = self.plc_track,
+            passdown = self.passdown,
+            rca_detail = self.rca_detail,
+            second_tse_dispatch_item = self.second_tse_dispatch_item,
+            second_tse = self.second_tse,
+            second_escalation = self.second_escalation,
+            second_deescalation = self.deescalation,
+            third_tse_dispatch_item = self.third_tse_dispatch_item,
+            third_tse = self.third_tse,
+            image = self.image,
+            poa_1 = self.poa_1,
+            poa_2 = self.poa_2,
+            poa_3 = self.poa_3,
+            poa_4 = self.poa_4,
+            poa_5 = self.poa_5,
+            seven_step = self.seven_step
+        )
+        obj.save()
+        return obj.to_dict(include_meta=True)
 
 class Tblinstallbase(models.Model):
     prod_family = models.CharField(db_column='Prod Family', max_length=200)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -350,21 +407,12 @@ class Tblzinputtse(models.Model):
     tse = models.CharField(db_column='TSE', max_length=200, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-
         db_table = 'TBLZinputTSE'
 
-class BlogPost(models.Model):
-    title = models.CharField(max_length = 200)
-    text = models.TextField(max_length = 100)
+@receiver(post_save, sender=Tblinstallbase)
+def index_post(sender, instance, **kwargs):
+    instance.indexing()
 
-    class Meta:
-        db_table = 'BlogPost'
-
-    def indexing(self):
-        obj = BlogPostIndex(
-            meta = {'id':self.id},
-            title = self.title,
-            text = self.text
-        )
-        obj.save()
-        return obj.to_dict(include_meta=True)
+@receiver(post_save, sender=Tblescalation)
+def index_post(sender, instance, **kwargs):
+    instance.indexing()

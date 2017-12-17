@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 import django.utils.timezone
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -107,13 +107,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tblescalation',
             fields=[
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('entry_date', models.DateField(default=django.utils.timezone.now)),
                 ('status', models.CharField(max_length=200, blank=True, db_column='Status')),
                 ('plc_status', models.CharField(max_length=200, blank=True, null=True, db_column='PLC_Status')),
                 ('poa_close', models.IntegerField(blank=True, null=True, db_column='POA-Close')),
                 ('survey', models.IntegerField(blank=True, null=True, db_column='Survey')),
                 ('esc_days', models.IntegerField(blank=True, null=True, db_column='ESC days')),
-                ('case_id', models.IntegerField(primary_key=True, serialize=False, db_column='Case ID')),
+                ('case_id', models.IntegerField(db_column='Case ID')),
                 ('product_family', models.CharField(max_length=200, db_column='Product_Family')),
                 ('utid', models.IntegerField(db_column='UTID')),
                 ('case_description', models.CharField(max_length=200, db_column='Case Description')),

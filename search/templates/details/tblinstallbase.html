@@ -1,0 +1,112 @@
+{% extends 'base.html' %} 
+{% load staticfiles %} 
+   
+{% block body %}
+    {% if tblinstallbase %}
+        <div class="header-panel col-md-12 col-sm-12">
+            <div class="title">
+                <label class="title-name">
+                    {{ tblinstallbase.prod_family }}
+                    <label class="title-value">
+                        {{ utid }}
+                    </label>
+                </label>
+            </div>
+            <div class="content col-md-10 col-sm-12 col-md-offset-1">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-1">
+                        <label>Legacy SN : {{ tblinstallbase.legacy_sn }}</label>
+                    </div>   
+                    <div class="col-md-4 col-sm-6 col-md-offset-1 pull-right">
+                        <label>FAB : {{ tblinstallbase.fab }}</label>
+                    </div>    
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-1">
+                        <label>Region Code : {{ tblinstallbase.region_code }}</label>
+                    </div>   
+                    <div class="col-md-4 col-sm-6 col-md-offset-1 pull-right">
+                        <label>SVR_UNIT : {{ tblinstallbase.svr_unit }}</label>
+                    </div>    
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-1">
+                        <label>Region : {{ tblinstallbase.region }}</label>
+                    </div>   
+                    <div class="col-md-4 col-sm-6 col-md-offset-1 pull-right">
+                        <label>SVR_UNIT_CODE : {{ tblinstallbase.svr_unit_code }}</label>
+                    </div>    
+                </div>
+            </div>
+        </div>
+        <div class="display-panel col-md-12 col-sm-12">
+            {% if tblescalations %}
+                {% csrf_token %}
+                <table class="table field-name text-center">
+                    <thead>
+                        <td>Case ID</td>
+                        <td>Escalation Date</td>
+                        <td>Descalation Date</td>
+                        <td>Case Description</td>
+                        <td>Problem Statement</td>
+                    </thead>
+                    
+                    {% for item in tblescalations %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'tblescalation_search' item.case_id %}" class="tblescalation-detailview">
+                                {{ item.case_id }}
+                            </a>
+                        </td>
+                        <td>{{ item.escalation }}</td>
+                        <td>{{ item.deescalation }}</td>
+                        <td>{{ item.case_description }}</td>
+                        <td>{{ item.problem_statement }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="col-md-12" id = "detail-view"> </div>
+            {% else %}
+                <h1>Not Found TblEscalations</h1>
+            {% endif %}
+        </div>
+    {% else %}    
+        <div style="color:white; font-size:50px;" class=" col-md-12 col-sm-12 header-panel"><label>UTID Not Found</label></div>
+    {% endif %}
+    
+    <script src="{% static 'base/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'base/js/custom.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $(".tblescalation-detailview").on('click', function(){
+                event.preventDefault();
+                var url_to = $(this).attr("href");
+                var send_data = $(this).text();
+                $.ajax({
+                    type: "POST",
+                    url: "1/",
+                    dataType: "json",
+                    data: {
+                        case_id: send_data,
+                        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    success: function(return_value){
+                        if(return_value == "No Submit")
+                            $("#detail-view").html(return_value)
+                        else
+                        {
+                            html = "";
+                            for(key in return_value)
+                            {
+                                html += "<div class='terms'><h2>" + key.charAt(0).toUpperCase() + key.slice(1) + "</h2>";
+                                html += "<h3>"+ return_value[key] +"</h3>";
+                                html += "</div>"
+                            }
+                            $("#detail-view").html(html);
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+{% endblock %}

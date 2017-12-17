@@ -158,3 +158,48 @@ img.bg {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+.header-panel{
+	margin-top: 50px;
+	text-align: center;
+}
+.header-panel .title{
+	
+	color: white;
+	font-weight: bold;
+	
+}
+.header-panel .title .title-name{
+	font-size: 30px;
+}
+.header-panel .title .title-value{
+	font-size: 45px;
+	vertical-align: middle;
+}
+.header-panel .content{
+	font-size: 30px;
+	color: black;
+	text-align: left;
+}
+.display-panel{
+	background: white;
+	text-align: center;
+}
+.display-panel .field-name{
+	font-size: 25px;
+	color: black;
+}
+#detail-view{
+	background:white;
+	text-align: center;
+}
+#detail-view .terms{
+	float: left;
+	margin-right: 30px;
+	margin-bottom: 20px;
+}
+#detail-view .terms h3{
+	border: 1px solid black;
+	border-radius: 3px;
+	padding: 10px;
+}

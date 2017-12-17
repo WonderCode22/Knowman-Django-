@@ -27,4 +27,4 @@ class TblescalationForm(forms.ModelForm):
 class SearchForm(forms.ModelForm):
     class Meta:
         model = Case
-        fields = ('case_number', 'utid',)
+        fields = ('symptoms', 'utid')

@@ -5,19 +5,18 @@
         <div class="panel-heading">
             <div class="panel-title">Search Knowman</div>
         </div>
-        <div class="container">
-            <div style="width:36%">
-                <form action="." method="GET">
-                    {% csrf_token %} {{ form|crispy }}
-                    <input type="submit" value="Search" class="btn-basic" />
-
-                </form>
-            </div>
+        <div class="well">
+            <form action="{% url 'search.views.search_tblinstallbase' %}" method="POST">
+                {% csrf_token %} {{ form|crispy }}
+                <input type="submit" value="Search" class="btn-basic" />
+                <br/>
+            </form>
         </div>
     </div>
 </div>
 
-{% endblock %} {% comment %}
+{% endblock %} 
+{% comment %}
 <form method="post" action="," class="form-horizontal">
     {% csrf_token %}
     <div id="signupalert" style="display:none" class="alert alert-danger">

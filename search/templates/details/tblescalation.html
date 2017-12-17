@@ -1,0 +1,72 @@
+{% extends 'base.html' %} 
+{% load staticfiles %} 
+{% load matching_score_tag %}   
+{% block body %}
+    {% if tblescalations %}
+        <div class="header-panel col-md-12 col-sm-12">
+        </div>
+        <div class="display-panel col-md-12 col-sm-12">
+            {% csrf_token %}
+            <table class="table field-name text-center">
+                <thead>
+                    <td>Matching Score</td>
+                    <td>Case ID</td>
+                    <td>Descalation Date</td>
+                    <td>Case Description</td>
+                    <td>Problem Statement</td>
+                </thead>
+                {% for item in tblescalations %}
+                <tr>
+                    <td>{% matching_score tblescalations.hits.max_score item.meta.score %}%</td>
+                    <td>
+                        <a href="{% url 'tblescalation_search' item.case_id %}" class="tblescalation-detailview">
+                            {{ item.case_id }}
+                        </a>
+                    </td>
+                    <td>{{ item.deescalation }}</td>
+                    <td>{{ item.case_description }}</td>
+                    <td>{{ item.problem_statement }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-12" id = "detail-view"> </div>
+    {% else %}    
+        <div style="color:white; font-size:50px;" class=" col-md-12 col-sm-12 header-panel"><label>Symptoms Not Found</label></div>
+    {% endif %}
+    
+    <script src="{% static 'base/js/jquery-3.2.1.min.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $(".tblescalation-detailview").on('click', function(){
+                event.preventDefault();
+                var url_to = $(this).attr("href");
+                var send_data = $(this).text();
+                $.ajax({
+                    type: "POST",
+                    url: "1/",
+                    dataType: "json",
+                    data: {
+                        case_id: send_data,
+                        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                    },
+                    success: function(return_value){
+                        if(return_value == "No Submit")
+                            $("#detail-view").html(return_value)
+                        else
+                        {
+                            html = "";
+                            for(key in return_value)
+                            {
+                                html += "<div class='terms'><h2>" + key.charAt(0).toUpperCase() + key.slice(1) + "</h2>";
+                                html += "<h3>"+ return_value[key] +"</h3>";
+                                html += "</div>"
+                            }
+                            $("#detail-view").html(html);
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+{% endblock %}
